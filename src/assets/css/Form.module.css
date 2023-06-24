@@ -1,0 +1,49 @@
+@import "//netdna.bootstrapcdn.com/font-awesome/3.0/css/font-awesome.css";
+
+.FormBox {
+    /* background-color: rgba(230, 237, 234, 0.868); */
+    /* background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%); */
+    /* background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+    box-shadow: 1px 1.7px 10px #332d2d;
+}
+
+.FormTitle {
+    font-size: 32px;
+    font-weight: bolder;
+    text-align: center;
+    margin-top: 15px;
+    color: purple;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.FormInput {
+    width: 90%;
+    height: 45px;
+    display: flex;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid rgb(115, 111, 111);
+    box-shadow: 0px 1.3px 8px gray;
+    padding: 10px 20px;
+    background-color: rgb(255, 255, 255);
+    overflow-x: hidden;
+    font-family: FontAwesome;
+
+}
+
+.FormInput:invalid[Focused="true"]{
+    border: 1px solid red;
+}
+.FormInput:focus{
+    border: 1px solid rgb(101, 97, 97);
+}
+.FormInput::placeholder {
+    font-family: FontAwesome;
+    font-size: larger;
+    word-spacing: 5px;
+    font-weight: 500;
+    /* color: rgb(1, 1, 14); */
+}
