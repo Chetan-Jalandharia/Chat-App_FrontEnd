@@ -1,18 +1,13 @@
-import {
-  Box,
-  useMediaQuery,
-  useTheme,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Box, useMediaQuery, useTheme, Typography } from "@mui/material";
 import UserApis from "../Apis/UserApis";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import form from "../assets/css/Form.module.css";
 import { useNavigate } from "react-router-dom";
-import { Toast } from "../Config/Alerts";
+import { Toast, errorAlert } from "../Config/Alerts";
+
 const Signup = () => {
-  const Navigate=useNavigate()
+  const Navigate = useNavigate();
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -35,6 +30,7 @@ const Signup = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
   const handleImage = (e) => {
     setUser((pre) => ({
       ...pre,
@@ -51,19 +47,19 @@ const Signup = () => {
     formdata.append("email", User.email);
     formdata.append("password", User.password);
     formdata.append("image", User.image);
-    console.log(formdata);
+
     UserApis.Register(formdata)
       .then((val) => {
         setLoading(false);
         console.log(val);
         Toast.fire({
           icon: "success",
-          title: "SignUp successfully",
+          title: "SignUp successfull",
         });
-        
       })
       .catch((err) => {
-        console.log(err);
+        errorAlert.fire();
+        setLoading(false);
       });
   };
 
@@ -182,8 +178,8 @@ const Signup = () => {
                 my: 3,
                 cursor: "pointer",
               }}
-              onClick={()=>{
-                Navigate("/login")
+              onClick={() => {
+                Navigate("/login");
               }}
             >
               Already have an Account? Signin

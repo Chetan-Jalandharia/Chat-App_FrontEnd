@@ -17,7 +17,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MasterPage />}>
-        <Route index element={<ProtectedRoute Component={HomePage} />} />
+        <Route index element={<ProtectedRoute Component={HomePage}  />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
       </Route>

@@ -10,8 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import UserApis from "../Apis/UserApis";
 import Context from "../Context";
-import socket from "../Config/Socket";
-import { Toast } from "../Config/Alerts";
+import { Toast, errorAlert } from "../Config/Alerts";
 
 const Login = () => {
   const { User, setUser } = useContext(Context);
@@ -37,11 +36,9 @@ const Login = () => {
   const handleSubmit = (e) => {
     setLoading(true);
     e.preventDefault();
-    // console.log(User);
     UserApis.Login(Data)
       .then((val) => {
         setLoading(false);
-        // console.log(val.data.data);
         setUser({
           id: val.data.data._id,
           name: val.data.data.name,
@@ -50,7 +47,6 @@ const Login = () => {
         });
 
         sessionStorage.setItem("auth", val.data.token);
-        // socket.emit("setStatus", { userId: User.id });
 
         setTimeout(() => {
           Navigate("/");
@@ -61,8 +57,8 @@ const Login = () => {
         });
       })
       .catch((err) => {
-        console.log(err);
-        alert(err);
+        errorAlert.fire()
+        setLoading(false);
       });
   };
 
