@@ -12,3 +12,12 @@ export const Toast = Swal.mixin({
   },
 });
 
+
+
+export const errorAlert=Swal.mixin({
+  icon:'error',
+  title:"Server Error",
+  text: 'Something went wrong!',
+  position: "center",
+  showConfirmButton: true,
+});

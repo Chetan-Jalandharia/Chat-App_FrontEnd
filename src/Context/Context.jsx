@@ -14,6 +14,7 @@ export default ({ children }) => {
     image: "",
   });
   const [ChatUser, setChatUser] = useState({
+    id:"",
     name: "",
     email: "",
     image: "",

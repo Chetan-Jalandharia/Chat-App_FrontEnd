@@ -11,11 +11,13 @@ const HomePage = () => {
   const auth = sessionStorage.getItem("auth");
 
   useEffect(() => {
+    // --------- set user status to online when user logedIn
     if (auth) {
       socket.emit("setStatus", { userId: User.id,socketId:socket.id });
     }
   }, [auth]);
 
+ 
   return (
     <>
       {auth ? (

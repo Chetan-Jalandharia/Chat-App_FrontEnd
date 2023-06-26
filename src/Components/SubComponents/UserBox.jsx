@@ -6,11 +6,10 @@ import Badge from "@mui/material/Badge";
 
 const UserBox = ({ data }) => {
   const { setzi, setChatUser, User } = useContext(Context);
-  // console.log(data);
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
-      backgroundColor: data.isOnline?"#44b700":"gray",
+      backgroundColor: data?.isOnline ? "#44b700" : "gray",
       color: "#44b700",
       "&::after": {
         position: "absolute",
@@ -45,6 +44,7 @@ const UserBox = ({ data }) => {
       view: true,
     });
     setChatUser({
+      id: user?._id,
       name: user?.name,
       email: user?.email,
       image: user?.image,
@@ -56,13 +56,11 @@ const UserBox = ({ data }) => {
     <>
       <Box
         sx={{
-          border: 1.7,
           borderRadius: 1,
-          margin: 1,
-          p: 1,
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "aliceblue",
+          mx: 2,
+          mb: 2.4,
+          backgroundColor: "#ffff",
+          boxShadow:"1px 1px 4px black"
         }}
         onClick={() => {
           chat(data);
@@ -70,24 +68,39 @@ const UserBox = ({ data }) => {
       >
         <Box
           sx={{
-            ml: 5,
-            mr: 4,
+            width:"90%",
+            mx:"auto",
+            py:1,
+            display: "flex",
+            alignItems: "center",
+         
           }}
         >
-          <StyledBadge
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            variant="dot"
+          <Box
+            sx={{
+            
+              width:"30%",
+              textAlign:"center"
+            }}
           >
-            <Avatar alt={data?.name} src={data?.image} />
-          </StyledBadge>
-        </Box>
-        <Box
-          sx={{
-            ml: 2,
-          }}
-        >
-          <Typography size={38}>{data?.name}</Typography>
+            <StyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+            >
+              <Avatar alt={data?.name} src={data?.image} sx={{ width: 50, height: 50 }}/>
+            </StyledBadge>
+          </Box>
+          <Box
+            sx={{
+              ml: 2,
+              width:"70%",
+              height:"100%",
+              
+            }}
+          >
+            <Typography  fontSize={20} color={"#3b4047"} >{data?.name}</Typography>
+          </Box>
         </Box>
       </Box>
     </>

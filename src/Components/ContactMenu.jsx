@@ -15,11 +15,14 @@ const ContactMenu = () => {
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("md"));
 
+  socket.on("statusUpdate", (data) => {
+    setStatusUpdate(!statusUpdate)
+    console.log(value, " : ", statusUpdate," : ",data)
+  });
+  
   useEffect(() => {
-    socket.on("statusUpdate", (data) => {
-      console.log(data);
-      setStatusUpdate((!statusUpdate));
-    })
+    console.log(" update");
+    // console.log(value);
 
     if (value == 0) {
       UserApis.ShowConversations(User.id)
@@ -40,7 +43,7 @@ const ContactMenu = () => {
           console.log("error occurs: " + err);
         });
     }
-  }, [value]);
+  }, [value, statusUpdate]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

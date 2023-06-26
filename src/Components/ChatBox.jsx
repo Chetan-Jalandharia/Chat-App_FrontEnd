@@ -4,19 +4,27 @@ import {
   IconButton,
   InputBase,
   Paper,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+
 import Emoji from "@mui/icons-material/EmojiEmotions";
 import SendIcon from "@mui/icons-material/Send";
-import React, { useContext, useEffect, useState } from "react";
-import Context from "../Context";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import UserApis from "../Apis/UserApis";
+import Context from "../Context";
+import socket from "../Config/Socket";
+import EmojiPick from "./SubComponents/EmojiPick";
 
 const ChatBox = () => {
   const { ChatUser, User } = useContext(Context);
+
+  const ScrollRef = useRef();
   const [Messages, setMessages] = useState([]);
   const [SendMessage, setSendMessage] = useState("");
+  const [arrivalMessage, setArrivalMessage] = useState("");
+  const [showEmoji, setShowEmoji] = useState(false);
 
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("md"));
@@ -25,11 +33,38 @@ const ChatBox = () => {
     UserApis.ShowMessages(ChatUser.conversationId).then((val) => {
       setMessages(val.data.data);
     });
+  }, [ChatUser]);
+
+  useEffect(() => {
+    socket.on("receiveNewMessage", (data) => {
+      // console.log("New Message: ", data);
+      setArrivalMessage(data);
+    });
   }, []);
 
+  useEffect(() => {
+    arrivalMessage &&
+      ChatUser?.id == arrivalMessage.senderId &&
+      setMessages((pre) => [...pre, arrivalMessage]);
+  }, [arrivalMessage, ChatUser]);
+
+  useEffect(() => {
+    ScrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [Messages, arrivalMessage]);
+
+  // ------ Handle message send by sender on sender view
   const handleMessage = (e) => {
     setSendMessage(e.target.value);
   };
+
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  // ------ Send message to server
   const handleSend = () => {
     const Data = {
       conversationId: ChatUser.conversationId,
@@ -37,9 +72,9 @@ const ChatBox = () => {
       text: SendMessage,
     };
     setSendMessage("");
+    socket.emit("sendMessage", { ...Data, receiverId: ChatUser?.id });
     UserApis.SendMessage(Data)
       .then((val) => {
-        console.log(val.data.data);
         setMessages((pre) => [...pre, val.data.data]);
       })
       .catch((err) => {
@@ -69,42 +104,57 @@ const ChatBox = () => {
         }}
       >
         {Messages.map((val, index) => {
-          if (val.senderId === User.id) {
-            return (
-              <Box
-                sx={{
-                  alignSelf: "flex-end",
-                  border: 1,
-                  width: 280,
-                  borderRadius: 1,
-                  p: 1,
-                  my: 1.5,
-                  bgcolor: "aliceblue",
-                }}
-              >
-                {val.text}
-              </Box>
-            );
-          } else {
-            return (
-              <Box
-                sx={{
-                  alignSelf: "flex-start",
-                  border: 1,
-                  width: 280,
-                  borderRadius: 1,
-                  p: 1,
-                  my: 1.5,
-                  // bgcolor:"lightlime"
-                }}
-              >
-                {val.text}
-              </Box>
-            );
-          }
+          return val.senderId === User.id ? (
+            <Box
+              ref={ScrollRef}
+              key={index}
+              sx={{
+                alignSelf: "flex-end",
+                border: 1,
+                borderColor: "divider",
+                borderRadius: "15px 15px 0px 15px",
+                width: 280,
+                maxWidth: 300,
+                p: 1.5,
+                my: 1.5,
+                color: "white",
+                fontSize: "17px",
+                bgcolor: "#6C9BCF",
+                wordBreak: "break-all",
+              }}
+            >
+              {val.text}
+            </Box>
+          ) : (
+            <Box
+              ref={ScrollRef}
+              key={index}
+              sx={{
+                alignSelf: "flex-start",
+                border: 1,
+                Width: 280,
+                maxWidth: 300,
+                borderRadius: "0px 15px 15px 15px",
+                p: 1.5,
+                my: 1.5,
+                fontSize: "17px",
+                bgcolor: "#ECF2FF",
+                wordBreak: "break-all",
+              }}
+            >
+              {val.text}
+            </Box>
+          );
         })}
-      </Box>
 
+        {showEmoji && (
+          <EmojiPick
+            onEmojiClick={(emojiObj, e) => {
+              setSendMessage((pre) => pre + emojiObj.emoji);
+            }}
+          />
+        )}
+      </Box>
       <Box
         className="chatInput"
         sx={{
@@ -114,7 +164,7 @@ const ChatBox = () => {
         }}
       >
         <Paper
-          component="form"
+          component="div"
           sx={{
             p: "4px 4px",
             display: "flex",
@@ -124,7 +174,11 @@ const ChatBox = () => {
             borderColor: "divider",
           }}
         >
-          <IconButton sx={{ p: "10px" }} aria-label="menu">
+          <IconButton
+            sx={{ p: "10px" }}
+            aria-label="menu"
+            onClick={() => setShowEmoji(!showEmoji)}
+          >
             <Emoji />
           </IconButton>
           <InputBase
@@ -132,6 +186,7 @@ const ChatBox = () => {
             placeholder="Type Message"
             value={SendMessage}
             onChange={handleMessage}
+            onKeyDown={handleEnter}
             inputProps={{ "aria-label": "Enter Message" }}
           />
 
@@ -139,7 +194,6 @@ const ChatBox = () => {
           <IconButton
             color="primary"
             sx={{ p: "10px", mx: 3 }}
-            aria-label="directions"
             onClick={handleSend}
           >
             <SendIcon />
