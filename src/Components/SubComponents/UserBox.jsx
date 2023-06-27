@@ -64,6 +64,7 @@ const UserBox = ({ data }) => {
         }}
         onClick={() => {
           chat(data);
+          window.history.pushState(null, null, window.location.pathname);
         }}
       >
         <Box

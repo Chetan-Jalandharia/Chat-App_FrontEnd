@@ -7,17 +7,29 @@ import Context from "../Context";
 import socket from "../Config/Socket";
 
 const HomePage = () => {
-  const { zi, User } = useContext(Context);
+  const { zi, setzi, User } = useContext(Context);
   const auth = sessionStorage.getItem("auth");
 
   useEffect(() => {
     // --------- set user status to online when user logedIn
     if (auth) {
-      socket.emit("setStatus", { userId: User.id,socketId:socket.id });
+      socket.emit("setStatus", { userId: User.id, socketId: socket.id });
     }
   }, [auth]);
 
- 
+  const onBackButtonEvent = (e) => {
+    e.preventDefault();
+    console.log("back clicked");
+    setzi({ B1: 1, B2: 0, view: false });
+  };
+
+  useEffect(() => {
+    window.addEventListener("popstate", onBackButtonEvent);
+    return () => {
+      window.removeEventListener("popstate", onBackButtonEvent);
+    };
+  }, []);
+
   return (
     <>
       {auth ? (
