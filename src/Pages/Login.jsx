@@ -1,9 +1,4 @@
-import {
-  Box,
-  useMediaQuery,
-  useTheme,
-  Typography,
-} from "@mui/material";
+import { Box, useMediaQuery, useTheme, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
 import form from "../assets/css/Form.module.css";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +52,8 @@ const Login = () => {
         });
       })
       .catch((err) => {
-        errorAlert.fire()
+        console.log("error occurs : ",err);
+        errorAlert.fire();
         setLoading(false);
       });
   };

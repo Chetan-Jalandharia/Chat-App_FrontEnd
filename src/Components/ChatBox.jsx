@@ -37,7 +37,6 @@ const ChatBox = () => {
 
   useEffect(() => {
     socket.on("receiveNewMessage", (data) => {
-      // console.log("New Message: ", data);
       setArrivalMessage(data);
     });
   }, []);

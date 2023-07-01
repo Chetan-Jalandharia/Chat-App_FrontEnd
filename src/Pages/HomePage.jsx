@@ -19,7 +19,6 @@ const HomePage = () => {
 
   const onBackButtonEvent = (e) => {
     e.preventDefault();
-    console.log("back clicked");
     setzi({ B1: 1, B2: 0, view: false });
   };
 

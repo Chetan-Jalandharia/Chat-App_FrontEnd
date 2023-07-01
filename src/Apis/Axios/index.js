@@ -1,5 +1,5 @@
 import axios from "axios";
 const Axios=axios.create({
-    baseURL:"http://localhost:5001/"
+    baseURL:"https://chat-app-api-cv6o.onrender.com/"
 })
 export default Axios;

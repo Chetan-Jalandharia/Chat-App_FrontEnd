@@ -51,7 +51,6 @@ const Signup = () => {
     UserApis.Register(formdata)
       .then((val) => {
         setLoading(false);
-        console.log(val);
         Toast.fire({
           icon: "success",
           title: "SignUp successfull",

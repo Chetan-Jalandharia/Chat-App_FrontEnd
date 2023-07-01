@@ -16,19 +16,14 @@ const ContactMenu = () => {
   const isSm = useMediaQuery(theme.breakpoints.down("md"));
 
   socket.on("statusUpdate", (data) => {
-    setStatusUpdate(!statusUpdate)
-    console.log(value, " : ", statusUpdate," : ",data)
+    setStatusUpdate(!statusUpdate);
   });
-  
-  useEffect(() => {
-    console.log(" update");
-    // console.log(value);
 
+  useEffect(() => {
     if (value == 0) {
       UserApis.ShowConversations(User.id)
         .then((val) => {
           setData(val.data.data);
-          console.log("first data: ", val.data.data);
         })
         .catch((err) => {
           console.log("error occurs: " + err);
@@ -37,7 +32,6 @@ const ContactMenu = () => {
       UserApis.AllUsers()
         .then((val) => {
           setData(val.data.data);
-          console.log("second data: ", val.data.data);
         })
         .catch((err) => {
           console.log("error occurs: " + err);
@@ -65,10 +59,7 @@ const ContactMenu = () => {
             <Box
               sx={{
                 py: 2,
-                // border: 1,
-                // borderColor: "divider",
                 minHeight: "85vh",
-                // bgcolor:"red"
               }}
             >
               {children}
